@@ -16,7 +16,14 @@ public class Company
 			for(int z=1; z<=10; z++) 
 			{
 				int randomNumber = rand.nextInt(50);
-				currentLocation.addItem("Item no #" + z, randomNumber, randomNumber, 1.11);
+				try
+				{
+					currentLocation.addItem("Item no #" + z, randomNumber, randomNumber+1, 1.11);
+				}
+				catch(IllegalArgumentException e)
+				{
+					System.err.printf("Warrning!\nError occured: %s\n\n", e.getMessage());
+				}
 			}
 		}
 	}

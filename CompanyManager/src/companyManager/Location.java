@@ -15,9 +15,20 @@ public class Location
 		this.name = aName;
 		this.locationItems = aLocationItems;
 	}
-	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice)
+	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
-		locationItems.add(new Item(aItemName, aQuantity, aMaximum, aPrice));
+		Item newItem;
+		try
+		{
+			newItem = new Item(aItemName, aQuantity, aMaximum, aPrice);
+		}
+		catch(IllegalArgumentException e)
+		{
+			throw e;
+		}
+		if(this.locationItems.contains(newItem))
+			throw new IllegalArgumentException("Item already in database!");
+		this.locationItems.add(newItem);
 	}
 	public void printLocationInfo()
 	{
