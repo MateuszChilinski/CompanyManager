@@ -6,6 +6,7 @@ public class Location
 {
 	private String name;
 	private ArrayList<Item> locationItems = new ArrayList<Item>();
+	
 	Location(String aName)
 	{
 		this.name = aName;
@@ -30,16 +31,16 @@ public class Location
 			throw new IllegalArgumentException("Item already in database!");
 		this.locationItems.add(newItem);
 	}
-	public void printLocationInfo()
+	public ArrayList<Item> getItems()
 	{
-		System.out.printf("Location name: %s\nItems in stock: %d\n", name, locationItems.size());
+		return this.locationItems;
 	}
-	public void printLocationItemsInfo()
+	public String getName()
 	{
-		System.out.printf("Location name: %s\n", name);
-		for(Item currentItem : locationItems)
-		{
-			currentItem.printInfo();
-		}
+		return this.name;
+	}
+	public int getItemsCount()
+	{
+		return this.locationItems.size();
 	}
 }

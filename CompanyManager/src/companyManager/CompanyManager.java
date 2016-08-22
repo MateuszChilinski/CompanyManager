@@ -12,9 +12,10 @@ public class CompanyManager
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);
 		});
-		Company myCompany = new Company();
-		System.out.printf("Welcome, your company name is %s\n", myCompany.getName());
-		myCompany.printLocations();
+		Company modelCompany = new Company();
+		CompanyView viewCompany = new CompanyView();
+		CompanyController myCompanyController = new CompanyController(modelCompany, viewCompany);
+		myCompanyController.printLocations();
 		//System.exit(0);
 	}
 

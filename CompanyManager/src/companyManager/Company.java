@@ -35,17 +35,14 @@ public class Company
 	{
 		return this.name;
 	}
+	public ArrayList<Location> getLocations()
+	{
+		return this.companyLocations;
+	}
 	public Location addLocation(String aName)
 	{
 		Location newLocation = new Location(aName);
 		this.companyLocations.add(newLocation);
 		return newLocation;
-	}
-	public void printLocations()
-	{
-		for(Location currentLocation : this.companyLocations)
-		{
-			currentLocation.printLocationInfo();
-		}
 	}
 }

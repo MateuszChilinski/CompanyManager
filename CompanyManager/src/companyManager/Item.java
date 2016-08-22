@@ -14,6 +14,7 @@ public class Item {
 		this.maximum = aMaximum;
 		this.price = aPrice;
 	}
+	
 	public String getName()
 	{
 		return this.itemName;
@@ -28,10 +29,14 @@ public class Item {
 			throw new ArithmeticException("Maximum value is zero!");
 		return quantity/maximum;
 	}
-	public void printInfo()
-	{
-		System.out.printf("Item name: %s\nQuantity: %d\nMaximum quantity: %d\nPrice per unit: %f", this.itemName, this.quantity, this.maximum, this.price);
+	public int getMaxmimum() {
+		return this.maximum;
 	}
+
+	public double getPrice() {
+		return this.price;
+	}
+	
 	public void removeItem(int removeQuantity)
 	{
 		this.quantity -= removeQuantity;
@@ -40,6 +45,7 @@ public class Item {
 	{
 		this.quantity += addQuantity;
 	}
+	
 	public boolean equals(Object o)
 	{
 		if(this.getClass() != o.getClass())
