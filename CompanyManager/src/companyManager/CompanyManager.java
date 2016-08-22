@@ -1,8 +1,13 @@
 package companyManager;
+
+
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import company.*;
+
 public class CompanyManager 
 {
 	public static void main(String[] args) 

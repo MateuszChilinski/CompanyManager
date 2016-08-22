@@ -1,17 +1,19 @@
-package companyManager;
+package location;
 
 import java.util.ArrayList;
+
+import item.Item;
 
 public class Location 
 {
 	private String name;
 	private ArrayList<Item> locationItems = new ArrayList<Item>();
 	
-	Location(String aName)
+	public Location(String aName)
 	{
 		this.name = aName;
 	}
-	Location(String aName, ArrayList<Item> aLocationItems)
+	public Location(String aName, ArrayList<Item> aLocationItems)
 	{
 		this.name = aName;
 		this.locationItems = aLocationItems;

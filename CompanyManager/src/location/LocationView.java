@@ -1,6 +1,10 @@
-package companyManager;
+package location;
 
 import java.util.ArrayList;
+
+import item.Item;
+import item.ItemController;
+import item.ItemView;
 
 public class LocationView {
 	

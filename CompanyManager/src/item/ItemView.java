@@ -1,4 +1,4 @@
-package companyManager;
+package item;
 
 public class ItemView {
 	public void printInfo(String itemName, int quantity, int maximum, double price)

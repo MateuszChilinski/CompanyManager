@@ -1,4 +1,4 @@
-package companyManager;
+package location;
 
 public class LocationController {
 	private Location model;

@@ -1,11 +1,11 @@
-package companyManager;
+package item;
 
 public class Item {
 	private String itemName = "";
 	private int quantity = 0;
 	private int maximum = 0;
 	private double price = 0;
-	Item(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
+	public Item(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
 		if(aMaximum <= 0 || aQuantity < 0 || aPrice < 0)
 			throw new IllegalArgumentException("Invaild arguments! Maximum value must be more than 0, quantity and price must be equal or more than 0!");

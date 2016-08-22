@@ -1,4 +1,4 @@
-package companyManager;
+package company;
 
 import java.util.ArrayList;
 
@@ -7,12 +7,16 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import location.Location;
+import location.LocationController;
+import location.LocationView;
+
 public class CompanyView extends JFrame{
 	
 	private static final int DEFAULT_WIDTH = 300;
 	private static final int DEFAULT_HEIGHT = 200;
 	private JPanel mainPanel = new JPanel();
-	CompanyView()
+	public CompanyView()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

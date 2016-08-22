@@ -1,13 +1,15 @@
-package companyManager;
+package company;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import location.Location;
  
 public class Company 
 {
 	private ArrayList<Location> companyLocations = new ArrayList<Location>();
 	private String name = "Testing Company";
-	Company() // debugging purpose, 3 locations with 10 items in each
+	public Company() // debugging purpose, 3 locations with 10 items in each
 	{
 		Random rand = new Random();
 		for(int i=1;i<=3;i++)
@@ -27,7 +29,7 @@ public class Company
 			}
 		}
 	}
-	Company(ArrayList<Location> aCompanyLocations)
+	public Company(ArrayList<Location> aCompanyLocations)
 	{
 		this.companyLocations = aCompanyLocations;
 	}

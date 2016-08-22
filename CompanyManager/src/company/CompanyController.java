@@ -1,14 +1,17 @@
-package companyManager;
+package company;
 
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
+import company.Company;
+import company.CompanyView;
+
 public class CompanyController {
 	private Company model;
 	private CompanyView view;
-	CompanyController(Company model, CompanyView view)
+	public CompanyController(Company model, CompanyView view)
 	{
 		this.model = model;
 		this.view = view;
