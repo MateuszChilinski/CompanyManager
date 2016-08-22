@@ -50,26 +50,21 @@ public class CompanyView extends JFrame{
 		position.weighty = 1;
 		position.weightx = 1;
 		position.anchor = GridBagConstraints.NORTHWEST;
+		position.fill = GridBagConstraints.HORIZONTAL;
 		add(mainPanel, position);
 	}
 	public void printLocations(ArrayList<Location> companyLocations)
 	{
 		JTextField searchBar = new JTextField("");
 		DefaultTableModel model = new LocationList();
-		
-		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, model, companyLocations));
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
+		position.weightx = 1;
+		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, model, companyLocations));
 		position.gridx = 0;
 		position.gridy = 0;
 		mainPanel.add(searchBar, position);
-		int i = 1;
-		for(Location currentLocation : companyLocations)
-		{
-			LocationController currentLocationController = new LocationController(currentLocation, new LocationView());
-			model.addRow(new Object[]{i++, currentLocationController.getName(), currentLocationController.getItemsCount()});
-		}
 		position.gridx = 0;
 		position.gridy = 1;
 		JTable locationTable = new JTable(model);
@@ -86,7 +81,7 @@ public class CompanyView extends JFrame{
 		}
 		@Override public boolean isCellEditable(int row, int column)
 		{
-			if(column == 1)
+			if(column == 1 && row != 0)
 				return true;
 			return false;
 		}
@@ -101,6 +96,7 @@ public class CompanyView extends JFrame{
 			this.model = model;
 			this.list = list;
 			this.searchBar = searchBar;
+			updateList();
 		}
 		public void changedUpdate(DocumentEvent e) {
 			updateList();
@@ -113,7 +109,6 @@ public class CompanyView extends JFrame{
 		}
 		private void updateList() {
 			String currentString = searchBar.getText();
-			CompanyView.super.setTitle(currentString);
 			int i = 1;
 			model.setRowCount(0);
 			model.addRow(new Object[]{"No.", "Location name", "Items count"});
