@@ -8,14 +8,11 @@ public class CompanyManager
 	public static void main(String[] args) 
 	{
 		EventQueue.invokeLater(() -> {
-			CompanyFrame frame = new CompanyFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setVisible(true);
+			Company modelCompany = new Company();
+			CompanyView viewCompany = new CompanyView();
+			CompanyController myCompanyController = new CompanyController(modelCompany, viewCompany);
+			myCompanyController.printLocations();
 		});
-		Company modelCompany = new Company();
-		CompanyView viewCompany = new CompanyView();
-		CompanyController myCompanyController = new CompanyController(modelCompany, viewCompany);
-		myCompanyController.printLocations();
 		//System.exit(0);
 	}
 

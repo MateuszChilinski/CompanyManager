@@ -15,6 +15,14 @@ public class LocationController {
 	{
 		view.printLocationInfo(model.getName(), model.getItemsCount());
 	}
+	public String getName()
+	{
+		return model.getName();
+	}
+	public int getItemsCount()
+	{
+		return model.getItemsCount();
+	}
 	public void printLocationItemsInfo()
 	{
 		view.printLocationItemsInfo(model.getItems(), model.getName());
