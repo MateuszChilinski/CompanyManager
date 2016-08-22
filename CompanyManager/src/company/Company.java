@@ -12,7 +12,7 @@ public class Company
 	public Company() // debugging purpose, 3 locations with 10 items in each
 	{
 		Random rand = new Random();
-		for(int i=1;i<=3;i++)
+		for(int i=1;i<=30;i++)
 		{
 			Location currentLocation = addLocation("Location #"+i);
 			for(int z=1; z<=10; z++) 
