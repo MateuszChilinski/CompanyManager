@@ -18,6 +18,10 @@ public class Location
 		this.name = aName;
 		this.locationItems = aLocationItems;
 	}
+	public void addItem(Item item)
+	{
+		this.locationItems.add(item);
+	}
 	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
 		Item newItem;

@@ -3,6 +3,7 @@ package company;
 import java.util.ArrayList;
 import java.util.Random;
 
+import item.Item;
 import location.Location;
  
 public class Company 
@@ -29,6 +30,10 @@ public class Company
 			}
 		}
 	}
+	public Company(String aName)
+	{
+		this.name = aName;
+	}
 	public Company(ArrayList<Location> aCompanyLocations)
 	{
 		this.companyLocations = aCompanyLocations;
@@ -46,5 +51,16 @@ public class Company
 		Location newLocation = new Location(aName);
 		this.companyLocations.add(newLocation);
 		return newLocation;
+	}
+	public Location addLocation(String aName, ArrayList<Item> items)
+	{
+		Location newLocation = new Location(aName, items);
+		this.companyLocations.add(newLocation);
+		return newLocation;
+	}
+	public Location addLocation(Location location)
+	{
+		this.companyLocations.add(location);
+		return location;
 	}
 }
