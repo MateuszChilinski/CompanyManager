@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -19,13 +21,56 @@ public class CompanyView extends JFrame{
 	private static final int DEFAULT_WIDTH = 1000;
 	private static final int DEFAULT_HEIGHT = 800;
 	private JPanel mainPanel = new JPanel(new GridBagLayout());
+	private JPanel toolbarPanel = new JPanel();
+	private JPanel contentPanel = new JPanel(new GridBagLayout());
+	private DefaultTableModel locationModel;
+	CompanyController controller;
 	public CompanyView()
+	{
+		initWindow();
+		initMainMenu();
+		initPanels();
+	}
+	public void setController(CompanyController companyController) {
+		this.controller = companyController;
+	}
+	public void initMainPanel()
+	{
+		/** Adding main Panel **/
+		GridBagConstraints position = new GridBagConstraints();
+		position.weighty = 1;
+		position.weightx = 1;
+		position.anchor = GridBagConstraints.NORTHWEST;
+		position.fill = GridBagConstraints.HORIZONTAL;
+		add(mainPanel, position);
+	}
+	public void initWindow()
 	{
 		setLayout(new GridBagLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		setTitle("Company Manager");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	}
+	public void initPanels()
+	{
+		GridBagConstraints position = new GridBagConstraints();
+		position.anchor = GridBagConstraints.NORTHWEST;
+		position.fill = GridBagConstraints.HORIZONTAL;
+		position.weightx = 0;
+		position.gridx = 0;
+		position.gridy = 0;
+		position.insets = new Insets(5, 5, 3, 3);
+		initHelpingMenu();
+		initMainPanel();
+		toolbarPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Company"));
+		mainPanel.add(toolbarPanel, position);
+		position.gridx = 1;
+		position.weightx = 1;
+		mainPanel.add(contentPanel, position);
+	}
+	public void initMainMenu()
+	{
 		/** Constructing main menu **/
 		JMenuBar mainMenu = new JMenuBar();
 		setJMenuBar(mainMenu);
@@ -45,30 +90,41 @@ public class CompanyView extends JFrame{
 		changeCompanyName.setToolTipText("Change name of your company.");
 		JMenuItem createNewLocation = companyMenu.add(new CreateNewLocationAction("Create New Location"));
 		createNewLocation.setToolTipText("Add completly new location to your company.");
-		/** Adding main Panel **/
+	}
+	public void initHelpingMenu()
+	{
+		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
 		GridBagConstraints position = new GridBagConstraints();
-		position.weighty = 1;
-		position.weightx = 1;
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
-		add(mainPanel, position);
+		position.weightx = 0;
+		position.gridx = 0;
+		position.gridy = 0;
+		helpingToolbar.setFloatable(false);
+		JButton addLocation = helpingToolbar.add(new CreateNewLocationAction("Add location"));
+		JButton addLocation2 = helpingToolbar.add(new ChooseLocationAction("something idk"));
+		toolbarPanel.add(helpingToolbar, position);
 	}
 	public void printLocations(ArrayList<Location> companyLocations)
 	{
 		JTextField searchBar = new JTextField("");
-		DefaultTableModel model = new LocationList();
+		locationModel = new LocationList();
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
 		position.weightx = 1;
-		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, model, companyLocations));
+		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, locationModel, companyLocations));
 		position.gridx = 0;
 		position.gridy = 0;
-		mainPanel.add(searchBar, position);
+		contentPanel.add(searchBar, position);
 		position.gridx = 0;
 		position.gridy = 1;
-		JTable locationTable = new JTable(model);
-		mainPanel.add(locationTable, position);
+		JTable locationTable = new JTable(locationModel);
+		contentPanel.add(locationTable, position);
+	}
+	public void addLocation(String name)
+	{
+		locationModel.addRow(new Object[] {locationModel.getRowCount(), name, 0});
 	}
 	private class LocationList extends DefaultTableModel
 	{
@@ -115,7 +171,7 @@ public class CompanyView extends JFrame{
 			for(Location currentLocation : list)
 			{
 				LocationController currentLocationController = new LocationController(currentLocation, new LocationView());
-				if(currentLocationController.getName().contains(currentString))
+				if(currentLocationController.getName().toLowerCase().contains(currentString.toLowerCase()))
 					model.addRow(new Object[]{i++, currentLocationController.getName(), currentLocationController.getItemsCount()});
 			}
 		}
@@ -140,6 +196,7 @@ public class CompanyView extends JFrame{
 		}
 		@Override public void actionPerformed(ActionEvent event)
 		{
+			controller.addLocation("zz");
 			CompanyView.super.setTitle("Last clicked: " + this.getClass().getName());
 		}
 	}

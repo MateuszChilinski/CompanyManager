@@ -13,11 +13,18 @@ public class CompanyController {
 	private CompanyView view;
 	public CompanyController(Company model, CompanyView view)
 	{
+		//model.setController(this);
+		view.setController(this);
 		this.model = model;
 		this.view = view;
 	}
 	public void printLocations()
 	{
 		view.printLocations(model.getLocations());
+	}
+	public void addLocation(String name)
+	{
+		model.addLocation(name);
+		view.addLocation(name);
 	}
 }

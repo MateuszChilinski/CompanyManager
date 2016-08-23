@@ -15,7 +15,7 @@ public class Company
 		for(int i=1;i<=30;i++)
 		{
 			Location currentLocation = addLocation("Location #"+i);
-			for(int z=1; z<=10; z++) 
+			for(int z=1; z<=rand.nextInt(20)+1; z++) 
 			{
 				int randomNumber = rand.nextInt(50);
 				try
