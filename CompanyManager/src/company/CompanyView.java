@@ -33,6 +33,11 @@ public class CompanyView extends JFrame{
 	}
 	public void setController(CompanyController companyController) {
 		this.controller = companyController;
+		updateTitle();
+	}
+	public void updateTitle()
+	{
+		setTitle("Company Manager - " + controller.getName());
 	}
 	public void initMainPanel()
 	{
@@ -49,7 +54,6 @@ public class CompanyView extends JFrame{
 		setLayout(new GridBagLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		setTitle("Company Manager");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 	public void initPanels()
@@ -113,7 +117,7 @@ public class CompanyView extends JFrame{
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
 		position.weightx = 1;
-		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, locationModel, companyLocations));
+		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, locationModel));
 		position.gridx = 0;
 		position.gridy = 0;
 		contentPanel.add(searchBar, position);
@@ -125,6 +129,10 @@ public class CompanyView extends JFrame{
 	public void addLocation(String name)
 	{
 		locationModel.addRow(new Object[] {locationModel.getRowCount(), name, 0});
+	}
+	public void locationEditor(JFrame owner, Location location)
+	{
+		
 	}
 	private class LocationList extends DefaultTableModel
 	{
@@ -147,10 +155,9 @@ public class CompanyView extends JFrame{
 		JTextField searchBar;
 		DefaultTableModel model;
 		ArrayList<Location> list;
-		UpdateSearch(JTextField searchBar, DefaultTableModel model, ArrayList<Location> list)
+		UpdateSearch(JTextField searchBar, DefaultTableModel model)
 		{
 			this.model = model;
-			this.list = list;
 			this.searchBar = searchBar;
 			updateList();
 		}
@@ -167,12 +174,11 @@ public class CompanyView extends JFrame{
 			String currentString = searchBar.getText();
 			int i = 1;
 			model.setRowCount(0);
-			model.addRow(new Object[]{"No.", "Location name", "Items count"});
-			for(Location currentLocation : list)
+			model.addRow(new Object[]{"<html><b>No.</b></html>", "<html><b>Location name</b></html>", "<html><b>Items count</b></html>"});
+			ArrayList<Location> currentList = controller.getLocations(currentString);
+			for(Location currentLocation : currentList)
 			{
-				LocationController currentLocationController = new LocationController(currentLocation, new LocationView());
-				if(currentLocationController.getName().toLowerCase().contains(currentString.toLowerCase()))
-					model.addRow(new Object[]{i++, currentLocationController.getName(), currentLocationController.getItemsCount()});
+					model.addRow(new Object[]{i++, currentLocation.getName(), currentLocation.getItemsCount()});
 			}
 		}
 	}
@@ -185,7 +191,8 @@ public class CompanyView extends JFrame{
 		}
 		@Override public void actionPerformed(ActionEvent event)
 		{
-			CompanyView.super.setTitle("Last clicked: " + this.getClass().getName());
+			controller.setName("zz");
+			updateTitle();
 		}
 	}
 	private class CreateNewLocationAction extends AbstractAction
@@ -196,8 +203,8 @@ public class CompanyView extends JFrame{
 		}
 		@Override public void actionPerformed(ActionEvent event)
 		{
-			controller.addLocation("zz");
-			CompanyView.super.setTitle("Last clicked: " + this.getClass().getName());
+			Location newLocation = new Location("New location");
+			controller.locationEditor(CompanyView.this, newLocation);
 		}
 	}
 	private class ChooseLocationAction extends AbstractAction

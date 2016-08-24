@@ -13,6 +13,10 @@ public class Location
 	{
 		this.name = aName;
 	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 	public Location(String aName, ArrayList<Item> aLocationItems)
 	{
 		this.name = aName;

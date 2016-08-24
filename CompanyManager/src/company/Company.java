@@ -63,4 +63,8 @@ public class Company
 		this.companyLocations.add(location);
 		return location;
 	}
+	public void setName(String name) {
+		this.name = name;
+		//TODO:set name in files as well
+	}
 }
