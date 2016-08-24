@@ -10,6 +10,10 @@ public class LocationController {
 		view.setController(this);
 		this.view = view;
 	}
+	public void removeLocation()
+	{
+		model.setName(null);
+	}
 	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
 		model.addItem(aItemName, aQuantity, aMaximum, aPrice);

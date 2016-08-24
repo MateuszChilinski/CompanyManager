@@ -41,6 +41,15 @@ public class CompanyController {
 		return model.addLocation(name);
 		//TODO: add location to file/server as well
 	}
+	public Location addLocation(Location location)
+	{
+		return model.addLocation(location);
+		//TODO: add location to file/server as well
+	}
+	public Location getLocation(int i)
+	{
+		return model.getLocation(i);
+	}
 	public void setName(String name)
 	{
 		model.setName(name);
@@ -53,5 +62,11 @@ public class CompanyController {
 		LocationView locationView = new LocationView();
 		LocationController locationController = new LocationController(location, locationView);
 		locationController.locationEditor(owner);
+		if(location.getName() != null)
+			this.addLocation(location);
+		updateLocations();
+	}
+	public void updateLocations() {
+		view.updateLocations(model.getLocations());
 	}
 }

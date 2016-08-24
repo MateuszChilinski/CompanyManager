@@ -31,7 +31,7 @@ public class LocationView {
 			currentItemController.printInfo();
 		}
 	}
-
+	
 	public void displayDialbox(JFrame owner) {
 		LocationEditor z = new LocationEditor(owner);
 	}
@@ -46,16 +46,16 @@ public class LocationView {
 		position.gridy = 0;
 		JPanel locationEditorPanel = new JPanel(new GridBagLayout());
 		locationEditorPanel.setSize(1000, 1000);
-		JTextField locationName = new JTextField("New Layout");
+		JTextField locationName = new JTextField(controller.getName());
 		locationEditorPanel.add(locationName, position);
 		position.gridy = 1;
 		position.weightx = 0.1;
 		JPanel actionPanel = new JPanel();
 		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveLocation(locationName.getText()); ((CompanyView) owner).addLocation(locationName.getText());});
+		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveLocation(locationName.getText());});
 		actionPanel.add(saveButton, position);
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(event -> { dialogBox.setVisible(false); });
+		cancelButton.addActionListener(event -> { dialogBox.setVisible(false); controller.removeLocation(); });
 		actionPanel.add(cancelButton, position);
 		locationEditorPanel.add(actionPanel, position);
 		//locationEditorPanel.setLayout(new GridBagLayout());

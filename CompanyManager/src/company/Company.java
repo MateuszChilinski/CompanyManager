@@ -67,4 +67,8 @@ public class Company
 		this.name = name;
 		//TODO:set name in files as well
 	}
+	public Location getLocation(int i)
+	{
+		return this.companyLocations.get(i);
+	}
 }

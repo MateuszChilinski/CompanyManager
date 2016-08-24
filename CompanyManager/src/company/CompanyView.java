@@ -23,8 +23,11 @@ public class CompanyView extends JFrame{
 	private JPanel mainPanel = new JPanel(new GridBagLayout());
 	private JPanel toolbarPanel = new JPanel();
 	private JPanel contentPanel = new JPanel(new GridBagLayout());
-	private DefaultTableModel locationModel;
+	private DefaultTableModel locationModel = new LocationList();;
+	private UpdateSearch updateList;
 	CompanyController controller;
+	JTable locationTable;
+	JTextField searchBar = new JTextField("");
 	public CompanyView()
 	{
 		initWindow();
@@ -94,6 +97,12 @@ public class CompanyView extends JFrame{
 		changeCompanyName.setToolTipText("Change name of your company.");
 		JMenuItem createNewLocation = companyMenu.add(new CreateNewLocationAction("Create New Location"));
 		createNewLocation.setToolTipText("Add completly new location to your company.");
+		/** Constructing help menu **/
+		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setToolTipText("In case you need some help.");
+		mainMenu.add(helpMenu);
+		JMenuItem about = helpMenu.add(new AboutAction("About"));
+		createNewLocation.setToolTipText("About software and author.");
 	}
 	public void initHelpingMenu()
 	{
@@ -105,26 +114,31 @@ public class CompanyView extends JFrame{
 		position.gridx = 0;
 		position.gridy = 0;
 		helpingToolbar.setFloatable(false);
-		JButton addLocation = helpingToolbar.add(new CreateNewLocationAction("Add location"));
-		JButton addLocation2 = helpingToolbar.add(new ChooseLocationAction("something idk"));
+		helpingToolbar.add(new CreateNewLocationAction("Add location"));
+		helpingToolbar.add(new ChangeCompanyNameAction("Change name"));
 		toolbarPanel.add(helpingToolbar, position);
 	}
 	public void printLocations(ArrayList<Location> companyLocations)
 	{
-		JTextField searchBar = new JTextField("");
-		locationModel = new LocationList();
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
 		position.weightx = 1;
-		searchBar.getDocument().addDocumentListener(new UpdateSearch(searchBar, locationModel));
 		position.gridx = 0;
 		position.gridy = 0;
 		contentPanel.add(searchBar, position);
 		position.gridx = 0;
 		position.gridy = 1;
-		JTable locationTable = new JTable(locationModel);
+		updateList = new UpdateSearch(searchBar, locationModel);
+		updateLocations(companyLocations);
+		searchBar.getDocument().addDocumentListener(updateList);
+		locationTable.addMouseListener(new TableDobuleClick());
 		contentPanel.add(locationTable, position);
+	}
+	public void updateLocations(ArrayList<Location> companyLocations)
+	{
+		updateList.updateList();
+		locationTable = new JTable(locationModel);
 	}
 	public void addLocation(String name)
 	{
@@ -133,6 +147,19 @@ public class CompanyView extends JFrame{
 	public void locationEditor(JFrame owner, Location location)
 	{
 		
+	}
+	private class TableDobuleClick extends MouseAdapter
+	{
+		@Override public void mousePressed(MouseEvent me) 
+		{ 
+			JTable table = (JTable) me.getSource();
+	        Point p = me.getPoint();
+	        int locationID = table.rowAtPoint(p)-1;
+	        int column = table.columnAtPoint(p);
+	        if (me.getClickCount() == 2 && column != 1) {
+	            controller.locationEditor(CompanyView.this, controller.getLocation(locationID));
+	        }
+		}
 	}
 	private class LocationList extends DefaultTableModel
 	{
@@ -153,36 +180,36 @@ public class CompanyView extends JFrame{
 	
 	private class UpdateSearch implements DocumentListener {
 		JTextField searchBar;
-		DefaultTableModel model;
+		DefaultTableModel tableModel;
 		ArrayList<Location> list;
-		UpdateSearch(JTextField searchBar, DefaultTableModel model)
+		UpdateSearch(JTextField searchBar, DefaultTableModel tableModel)
 		{
-			this.model = model;
+			this.tableModel = tableModel;
 			this.searchBar = searchBar;
 			updateList();
 		}
-		public void changedUpdate(DocumentEvent e) {
+		@Override public void changedUpdate(DocumentEvent e) {
 			updateList();
 		}
-		public void removeUpdate(DocumentEvent e) {
+		@Override public void removeUpdate(DocumentEvent e) {
 			updateList();
 		}
-		public void insertUpdate(DocumentEvent e) {
+		@Override public void insertUpdate(DocumentEvent e) {
 			updateList();
 		}
 		private void updateList() {
 			String currentString = searchBar.getText();
 			int i = 1;
-			model.setRowCount(0);
-			model.addRow(new Object[]{"<html><b>No.</b></html>", "<html><b>Location name</b></html>", "<html><b>Items count</b></html>"});
+			tableModel.setRowCount(0);
+			tableModel.addRow(new Object[]{"<html><b>No.</b></html>", "<html><b>Location name</b></html>", "<html><b>Items count</b></html>"});
 			ArrayList<Location> currentList = controller.getLocations(currentString);
 			for(Location currentLocation : currentList)
 			{
-					model.addRow(new Object[]{i++, currentLocation.getName(), currentLocation.getItemsCount()});
+				tableModel.addRow(new Object[]{i++, currentLocation.getName(), currentLocation.getItemsCount()});
 			}
 		}
 	}
-	
+
 	private class ChangeCompanyNameAction extends AbstractAction
 	{
 		public ChangeCompanyNameAction(String name)
@@ -191,8 +218,22 @@ public class CompanyView extends JFrame{
 		}
 		@Override public void actionPerformed(ActionEvent event)
 		{
-			controller.setName("zz");
+			String s = (String) JOptionPane.showInputDialog(CompanyView.super.getContentPane(), "Type new company name.", "Company Name", JOptionPane.QUESTION_MESSAGE, null, null, controller.getName());
+				if ((s != null) && (s.length() > 0)) {
+					controller.setName(s);
+				}
 			updateTitle();
+		}
+	}
+	private class AboutAction extends AbstractAction
+	{
+		public AboutAction(String name)
+		{
+			super(name);
+		}
+		@Override public void actionPerformed(ActionEvent event)
+		{
+			JOptionPane.showMessageDialog(CompanyView.this, "<html><b>Company Manager</b><br/><br/>Author: Mateusz Chiliñski<br/>Email: mateusz@chilinski.eu<br/><br/></html>");
 		}
 	}
 	private class CreateNewLocationAction extends AbstractAction
