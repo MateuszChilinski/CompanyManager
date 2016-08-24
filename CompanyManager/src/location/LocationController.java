@@ -12,7 +12,7 @@ public class LocationController {
 	}
 	public void removeLocation()
 	{
-		model.setName(null);
+		model.removeLocation();
 	}
 	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{

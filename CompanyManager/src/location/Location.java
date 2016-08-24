@@ -53,4 +53,8 @@ public class Location
 	{
 		return this.locationItems.size();
 	}
+	public void removeLocation() {
+		this.name = null;
+		this.locationItems = null;
+	}
 }

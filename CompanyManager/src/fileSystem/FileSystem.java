@@ -24,6 +24,13 @@ public class FileSystem {
 			return new String(Files.readAllBytes(Paths.get(path)));
 		}
 	}
+	public void saveFile(String path, String json) throws UnsupportedEncodingException, FileNotFoundException, IOException
+	{
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path)))) 
+		{
+			writer.write(json);
+		}
+	}
 	public Company importCompany(String company)
 	{
 		currentObject = new JSONObject(company);
@@ -45,7 +52,10 @@ public class FileSystem {
 				newCompany += "{\"itemName\":\"" + item.getName() + "\", \"itemQuantity\":" + item.getQuantity() + ", \"itemMaximum\":"
 							+ item.getMaxmimum() + ", \"itemPrice\":" + item.getPrice() + "},\n";
 			}
-			newCompany = newCompany.substring(0, newCompany.length()-2);
+			if(location.getItems().size() > 0)
+				newCompany = newCompany.substring(0, newCompany.length()-2);
+			else
+				newCompany = newCompany.substring(0, newCompany.length()-1);
 			newCompany += "]},\n";
 		}
 		newCompany = newCompany.substring(0, newCompany.length()-2);

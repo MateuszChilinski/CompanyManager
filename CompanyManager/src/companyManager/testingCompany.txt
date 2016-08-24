@@ -173,4 +173,4 @@
 {"itemName":"Item no #3", "itemQuantity":30, "itemMaximum":31, "itemPrice":1.11},
 {"itemName":"Item no #4", "itemQuantity":47, "itemMaximum":48, "itemPrice":1.11},
 {"itemName":"Item no #5", "itemQuantity":40, "itemMaximum":41, "itemPrice":1.11},
-{"itemName":"Item no #6", "itemQuantity":17, "itemMaximum":18, "itemPrice":1.11}]}]}"
+{"itemName":"Item no #6", "itemQuantity":17, "itemMaximum":18, "itemPrice":1.11}]}]}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -67,11 +68,13 @@ public class CompanyView extends JFrame{
 		position.weightx = 0;
 		position.gridx = 0;
 		position.gridy = 0;
+		position.weighty = 0;
 		position.insets = new Insets(5, 5, 3, 3);
 		initHelpingMenu();
 		initMainPanel();
 		toolbarPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Company"));
 		mainPanel.add(toolbarPanel, position);
+		position.weighty = 1;
 		position.gridx = 1;
 		position.weightx = 1;
 		mainPanel.add(contentPanel, position);
@@ -86,7 +89,7 @@ public class CompanyView extends JFrame{
 		settingsMenu.setToolTipText("Settings of current view.");
 		mainMenu.add(settingsMenu);
 		/** Company menu items list **/
-		JMenuItem chooseLocation = 	settingsMenu.add(new ChooseLocationAction("Choose Location"));
+		JMenuItem chooseLocation = 	settingsMenu.add(new SaveCompany("Save changes"));
 		chooseLocation.setToolTipText("Allows you to switch between locations.");
 		/** Constructing company management menu **/
 		JMenu companyMenu = new JMenu("Company");
@@ -111,6 +114,7 @@ public class CompanyView extends JFrame{
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
 		position.weightx = 0;
+		position.weighty = 0;
 		position.gridx = 0;
 		position.gridy = 0;
 		helpingToolbar.setFloatable(false);
@@ -209,7 +213,23 @@ public class CompanyView extends JFrame{
 			}
 		}
 	}
-
+	
+	private class SaveCompany extends AbstractAction
+	{
+		public SaveCompany(String name)
+		{
+			super(name);
+		}
+		@Override public void actionPerformed(ActionEvent event)
+		{
+			try {
+				controller.saveData();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	private class ChangeCompanyNameAction extends AbstractAction
 	{
 		public ChangeCompanyNameAction(String name)

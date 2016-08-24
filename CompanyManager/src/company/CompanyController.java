@@ -2,12 +2,17 @@ package company;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
 import company.Company;
 import company.CompanyView;
+import companyManager.CompanyManager;
+import fileSystem.FileSystem;
 import location.Location;
 import location.LocationController;
 import location.LocationView;
@@ -68,5 +73,12 @@ public class CompanyController {
 	}
 	public void updateLocations() {
 		view.updateLocations(model.getLocations());
+	}
+	public void saveData() throws UnsupportedEncodingException, FileNotFoundException, IOException
+	{
+		FileSystem myFile = new FileSystem();
+		String url = CompanyManager.class.getResource("testingCompany.txt").getPath();
+		url = url.substring(1, url.length());
+		myFile.saveFile(url, myFile.exportCompany(this.model));
 	}
 }
