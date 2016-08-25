@@ -45,13 +45,24 @@ public class CompanyView extends JFrame{
 	}
 	public void initMainPanel()
 	{
-		/** Adding main Panel **/
+		add(mainPanel, setPosition(0, 0, 1, 1));
+	}
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty)
+	{
 		GridBagConstraints position = new GridBagConstraints();
-		position.weighty = 1;
-		position.weightx = 1;
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
-		add(mainPanel, position);
+		position.gridx = gridx;
+		position.gridy = gridy;
+		position.weightx = weightx;
+		position.weighty = weighty;
+		return position;
+	}
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty, Insets insets)
+	{
+		GridBagConstraints position = setPosition(gridx, gridy, weightx, weighty);
+		position.insets = insets;
+		return position;
 	}
 	public void initWindow()
 	{
@@ -62,22 +73,11 @@ public class CompanyView extends JFrame{
 	}
 	public void initPanels()
 	{
-		GridBagConstraints position = new GridBagConstraints();
-		position.anchor = GridBagConstraints.NORTHWEST;
-		position.fill = GridBagConstraints.HORIZONTAL;
-		position.weightx = 0;
-		position.gridx = 0;
-		position.gridy = 0;
-		position.weighty = 0;
-		position.insets = new Insets(5, 5, 3, 3);
 		initHelpingMenu();
 		initMainPanel();
 		toolbarPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Company"));
-		mainPanel.add(toolbarPanel, position);
-		position.weighty = 1;
-		position.gridx = 1;
-		position.weightx = 1;
-		mainPanel.add(contentPanel, position);
+		mainPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
+		mainPanel.add(contentPanel, setPosition(1, 0, 1, 1));
 	}
 	public void initMainMenu()
 	{
@@ -110,34 +110,19 @@ public class CompanyView extends JFrame{
 	public void initHelpingMenu()
 	{
 		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
-		GridBagConstraints position = new GridBagConstraints();
-		position.anchor = GridBagConstraints.NORTHWEST;
-		position.fill = GridBagConstraints.HORIZONTAL;
-		position.weightx = 0;
-		position.weighty = 0;
-		position.gridx = 0;
-		position.gridy = 0;
 		helpingToolbar.setFloatable(false);
 		helpingToolbar.add(new CreateNewLocationAction("Add location"));
 		helpingToolbar.add(new ChangeCompanyNameAction("Change name"));
-		toolbarPanel.add(helpingToolbar, position);
+		toolbarPanel.add(helpingToolbar, setPosition(0,0,0,0));
 	}
 	public void printLocations(ArrayList<Location> companyLocations)
 	{
-		GridBagConstraints position = new GridBagConstraints();
-		position.anchor = GridBagConstraints.NORTHWEST;
-		position.fill = GridBagConstraints.HORIZONTAL;
-		position.weightx = 1;
-		position.gridx = 0;
-		position.gridy = 0;
-		contentPanel.add(searchBar, position);
-		position.gridx = 0;
-		position.gridy = 1;
+		contentPanel.add(searchBar, setPosition(0,0,1,0));
 		updateList = new UpdateSearch(searchBar, locationModel);
 		updateLocations(companyLocations);
 		searchBar.getDocument().addDocumentListener(updateList);
 		locationTable.addMouseListener(new TableDobuleClick());
-		contentPanel.add(locationTable, position);
+		contentPanel.add(locationTable, setPosition(0,1,1,0));
 	}
 	public void updateLocations(ArrayList<Location> companyLocations)
 	{
