@@ -62,12 +62,12 @@ public class CompanyController {
 	public String getName() {
 		return model.getName();
 	}
-	public void locationEditor(JFrame owner, Location location)
+	public void locationEditor(JFrame owner, Location location, boolean isNew)
 	{
 		LocationView locationView = new LocationView();
 		LocationController locationController = new LocationController(location, locationView);
-		locationController.locationEditor(owner);
-		if(location.getName() != null)
+		locationController.locationEditor(owner, isNew);
+		if(location.getName() != null && isNew == true)
 			this.addLocation(location);
 		updateLocations();
 	}

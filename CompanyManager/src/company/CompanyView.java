@@ -161,7 +161,7 @@ public class CompanyView extends JFrame{
 	        int locationID = table.rowAtPoint(p)-1;
 	        int column = table.columnAtPoint(p);
 	        if (me.getClickCount() == 2 && column != 1) {
-	            controller.locationEditor(CompanyView.this, controller.getLocation(locationID));
+	            controller.locationEditor(CompanyView.this, controller.getLocation(locationID), false);
 	        }
 		}
 	}
@@ -265,7 +265,7 @@ public class CompanyView extends JFrame{
 		@Override public void actionPerformed(ActionEvent event)
 		{
 			Location newLocation = new Location("New location");
-			controller.locationEditor(CompanyView.this, newLocation);
+			controller.locationEditor(CompanyView.this, newLocation, true);
 		}
 	}
 	private class ChooseLocationAction extends AbstractAction

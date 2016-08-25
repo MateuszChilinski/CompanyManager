@@ -34,9 +34,9 @@ public class LocationController {
 	{
 		view.printLocationItemsInfo(model.getItems(), model.getName());
 	}
-	public void locationEditor(JFrame owner)
+	public void locationEditor(JFrame owner, boolean isNew)
 	{
-		view.displayDialbox(owner);
+		view.displayDialbox(owner, isNew);
 	}
 	public void editLocation(String name)
 	{

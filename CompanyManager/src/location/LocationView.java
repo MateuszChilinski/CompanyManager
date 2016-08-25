@@ -36,11 +36,11 @@ public class LocationView {
 		}
 	}
 	
-	public void displayDialbox(JFrame owner) {
-		LocationEditor z = new LocationEditor(owner);
+	public void displayDialbox(JFrame owner, boolean isNew) {
+		LocationEditor z = new LocationEditor(owner, isNew);
 	}
 	
-	public JPanel locationEditor(JFrame owner, JDialog dialogBox)
+	public JPanel locationEditor(JFrame owner, JDialog dialogBox, boolean isNew)
 	{
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
@@ -52,7 +52,10 @@ public class LocationView {
 		JPanel locationEditorPanel = new JPanel(new GridBagLayout());
 		locationEditorPanel.setSize(1000, 1000);
 		JTextField locationName = new JTextField(controller.getName());
-		locationEditorPanel.add(locationName, position);
+		JPanel locationNamePanel = new JPanel(new GridBagLayout());
+		locationNamePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Name"));
+		locationNamePanel.add(locationName, position);
+		locationEditorPanel.add(locationNamePanel, position);
 		position.gridy = 1;
 		position.weightx = 1;
 		JPanel actionPanel = new JPanel();
@@ -60,7 +63,7 @@ public class LocationView {
 		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveLocation(locationName.getText());});
 		actionPanel.add(saveButton, position);
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(event -> { dialogBox.setVisible(false); controller.removeLocation(); });
+		cancelButton.addActionListener(event -> { dialogBox.setVisible(false); if(isNew == true) controller.removeLocation(); });
 		actionPanel.add(cancelButton, position);
 		locationEditorPanel.add(actionPanel, position);
 		
@@ -85,12 +88,12 @@ public class LocationView {
 	
 	private class LocationEditor extends JDialog
 	{
-		LocationEditor(JFrame owner)
+		LocationEditor(JFrame owner, boolean isNew)
 		{
 			super(owner, "Location Editor", true);
 			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { controller.removeLocation(); } });
 			this.setResizable(false);
-			add(locationEditor(owner, this));
+			add(locationEditor(owner, this, isNew));
 			pack();
 			setVisible(true);
 		}
