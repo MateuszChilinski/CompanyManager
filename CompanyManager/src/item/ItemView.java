@@ -1,5 +1,9 @@
 package item;
 
+/*
+ * Copyright (c) 2016 Mateusz Chiliñski https://chilinski.eu. All rights reserved.
+ * 
+ */
 
 import java.awt.event.*;
 import java.awt.*;

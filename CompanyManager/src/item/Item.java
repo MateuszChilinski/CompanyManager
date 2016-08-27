@@ -1,5 +1,10 @@
 package item;
 
+/*
+ * Copyright (c) 2016 Mateusz Chiliñski https://chilinski.eu. All rights reserved.
+ * 
+ */
+
 public class Item {
 	private String name = "";
 	private int quantity = 0;

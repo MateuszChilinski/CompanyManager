@@ -1,5 +1,10 @@
 package fileSystem;
 
+/*
+ * Copyright (c) 2016 Mateusz Chiliñski https://chilinski.eu. All rights reserved.
+ * 
+ */
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;

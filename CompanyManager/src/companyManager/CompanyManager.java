@@ -1,5 +1,9 @@
 package companyManager;
 
+/*
+ * Copyright (c) 2016 Mateusz Chiliñski https://chilinski.eu. All rights reserved.
+ * 
+ */
 
 import java.awt.*;
 import java.awt.event.*;
