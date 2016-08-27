@@ -3,4 +3,4 @@ Respository of CompanyManager - student project of a program which manages the s
 
 Copyright 2016 Mateusz Chiliński<br/>
 Website: https://chilinski.eu<br/>
-Email mateusz@chilinski
+Email: mateusz@chilinski
