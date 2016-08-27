@@ -3,6 +3,7 @@ package item;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -28,33 +29,40 @@ public class ItemView{
 	{
 		//itemEditorPanel.setSize(1000, 1000);
 		initiateMainPanel(dialogBox, isNew);
-		initiateToolbar();
+		if(isNew == false)
+		{
+			initiateToolbar(locationDialbox, dialogBox);
+		}
 		return itemEditorPanel;
 	}
-	private void initiateToolbar() {
+	private void initiateToolbar(JDialog locationDialbox, JDialog dialogBox) {
 		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
 		helpingToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Item"));
 		helpingToolbar.setFloatable(false);
-		JButton addItem = new JButton("No idea what to put there lol");
-		//addItem.addActionListener(new AddItem("Add an item"));
-		helpingToolbar.add(addItem);
+		JButton removeItem = new JButton("Remove item");
+		removeItem.addActionListener(new RemoveItem("Remove an item", locationDialbox, dialogBox));
+		helpingToolbar.add(removeItem);
 		toolbarPanel.add(helpingToolbar, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 		itemEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 	}
 	private void initiateMainPanel(JDialog dialogBox, boolean isNew) {
 		JPanel locationNamePanel = new JPanel(new GridBagLayout());
 		/** Location name **/
-		JTextField locationName = new JTextField(controller.getName());
-		locationNamePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Name"));
-		locationNamePanel.add(locationName, setPosition(0, 0, 1, 0));
+		locationNamePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Item propeties"));
 		itemEditorPanel.add(locationNamePanel, setPosition(1, 0, 0, 0,  new Insets(5, 5, 3, 3)));
-		/** Info about item **/
-
+		JTextField itemName = new JTextField(controller.getName());
+		locationNamePanel.add(itemName, setPosition(0, 0, 1, 0));
+		JTextField itemQuantity = new JTextField(String.valueOf(controller.getQuantity()));
+		locationNamePanel.add(itemQuantity, setPosition(0, 1, 1, 0));
+		JTextField itemMaximum = new JTextField(String.valueOf(controller.getMaximum()));
+		locationNamePanel.add(itemMaximum, setPosition(0, 2, 1, 0));
+		JTextField itemPrice = new JTextField(String.valueOf(controller.getPrice()));
+		locationNamePanel.add(itemPrice, setPosition(0, 3, 1, 0));
 		/** Panel for save & cancel **/
 		JPanel actionPanel = new JPanel();
 		/** Saving button **/
 		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveItem(locationName.getText());});
+		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveItem(itemName.getText(), Integer.parseInt(itemQuantity.getText()), Integer.parseInt(itemMaximum.getText()), Double.parseDouble(itemPrice.getText()));});
 		actionPanel.add(saveButton, setPosition(0, 1, 1, 0));
 		/** Cancel button **/
 		JButton cancelButton = new JButton("Cancel");
@@ -64,9 +72,11 @@ public class ItemView{
 		itemEditorPanel.add(actionPanel, setPosition(1, 2, 1, 0));
 		
 	}
-	private void saveItem(String text) {
-		// TODO Auto-generated method stub
-		
+	private void saveItem(String name, int quantity, int maximum, double price) {
+		controller.setName(name);
+		controller.setQuantity(quantity);
+		controller.setMaximum(maximum);
+		controller.setPrice(price);
 	}
 	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty)
 	{
@@ -98,6 +108,24 @@ public class ItemView{
 			add(itemEditor(locationDialbox, this, isNew));
 			pack();
 			setVisible(true);
+		}
+	}
+	private class RemoveItem extends AbstractAction
+	{
+		JDialog dialogBox;
+		JDialog locationDialbox;
+		public RemoveItem(String name, JDialog locationDialbox, JDialog dialogBox)
+		{
+			super(name);
+			this.dialogBox = dialogBox;
+			this.locationDialbox = locationDialbox;
+		}
+		@Override public void actionPerformed(ActionEvent event)
+		{			
+			controller.removeItem();
+			dialogBox.setVisible(false);
+			
+			//locationDialbox.pack();
 		}
 	}
 }

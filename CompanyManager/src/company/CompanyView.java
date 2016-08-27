@@ -145,7 +145,7 @@ public class CompanyView extends JFrame{
 	        Point p = me.getPoint();
 	        int locationID = table.rowAtPoint(p)-1;
 	        int column = table.columnAtPoint(p);
-	        if (me.getClickCount() == 2 && column != 1) {
+	        if (me.getClickCount() == 2 && column != 1 && locationID != -1) {
 	            controller.locationEditor(CompanyView.this, controller.getLocation(locationID), false);
 	        }
 		}

@@ -2,6 +2,8 @@ package location;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -71,7 +73,7 @@ public class LocationView {
 	{
 		locationEditorPanel.setSize(1000, 1000);
 		initiateMainPanel(dialogBox, isNew);
-		initiateToolbar();
+		initiateToolbar(dialogBox);
 		return locationEditorPanel;
 	}
 	private void initiateMainPanel(JDialog dialogBox, boolean isNew) {
@@ -102,30 +104,28 @@ public class LocationView {
 		JPanel itemsPanel = new JPanel(new GridBagLayout());
 		itemsPanel.add(searchBar, setPosition(0,0,1,0));
 		updateList = new UpdateSearch(searchBar, itemTableModel);
-		updateLocations(locationItems);
+		updateItems(locationItems);
 		searchBar.getDocument().addDocumentListener(updateList);
-		//itemTable.addMouseListener(new TableDobuleClick());
+		itemTable.addMouseListener(new TableDobuleClick());
 		itemsPanel.add(itemTable, setPosition(0,1,1,0));
 		itemsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Items"));
-		locationEditorPanel.add(itemsPanel, setPosition(1, 1, 0, 0));
+		locationEditorPanel.add(itemsPanel, setPosition(1, 1, 0, 0, new Insets(5, 5, 3, 3)));
 	}
-	public void initiateToolbar()
+	public void initiateToolbar(JDialog dialogBox)
 	{
 		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
 		helpingToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Location"));
 		helpingToolbar.setFloatable(false);
 		JButton addItem = new JButton("Add an item");
-		addItem.addActionListener(new AddItem("Add an item"));
+		addItem.addActionListener(new AddItem("Add an item", dialogBox));
 		helpingToolbar.add(addItem);
 		toolbarPanel.add(helpingToolbar, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 		locationEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 	}
-	public void updateLocations(ArrayList<Item> companyLocations)
-	{
+	public void updateItems(ArrayList<Item> items) {
 		updateList.updateList();
 		itemTable = new JTable(itemTableModel);
 	}
-	
 	public void saveLocation(String name)
 	{
 		controller.editLocation(name);
@@ -149,14 +149,30 @@ public class LocationView {
 	}
 	private class AddItem extends AbstractAction
 	{
-		public AddItem(String name)
+		JDialog dialogBox;
+		public AddItem(String name, JDialog dialogBox)
 		{
 			super(name);
+			this.dialogBox = dialogBox;
 		}
 		@Override public void actionPerformed(ActionEvent event)
 		{
-			Item newItem = controller.addItem("z", 1, 1, 2.0);
-			controller.itemEditor((JDialog) LocationView.this.locationDialbox, newItem, true);
+			Item newItem = new Item("New Item Name", 0, 0, 0.0);
+			controller.itemEditor((JDialog) locationDialbox, newItem, true);
+			dialogBox.pack();
+		}
+	}
+	private class TableDobuleClick extends MouseAdapter
+	{
+		@Override public void mousePressed(MouseEvent me) 
+		{ 
+			JTable table = (JTable) me.getSource();
+	        Point p = me.getPoint();
+	        int itemID = table.rowAtPoint(p)-1;
+	        int column = table.columnAtPoint(p);
+	        if (me.getClickCount() == 2 && column != 1 && itemID != -1) {
+	            controller.itemEditor((JDialog) locationDialbox, controller.getItem(itemID), false);
+	        }
 		}
 	}
 	private class UpdateSearch implements DocumentListener {
@@ -192,14 +208,22 @@ public class LocationView {
 	}
 	private class LocationEditor extends JDialog
 	{
+		LocationEditor()
+		{
+			
+		}
 		LocationEditor(JFrame owner, boolean isNew)
 		{
 			super(owner, "Location Editor", true);
-			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { controller.removeLocation(); } });
+			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { if(isNew == true) controller.removeLocation(); } });
 			this.setResizable(false);
 			add(locationEditor(owner, this, isNew));
 			pack();
 			setVisible(true);
+		}
+		public void update()
+		{
+			System.out.print("z");
 		}
 	}
 }

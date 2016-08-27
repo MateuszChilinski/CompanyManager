@@ -7,8 +7,8 @@ public class Item {
 	private double price = 0;
 	public Item(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
-		if(aMaximum <= 0 || aQuantity < 0 || aPrice < 0)
-			throw new IllegalArgumentException("Invaild arguments! Maximum value must be more than 0, quantity and price must be equal or more than 0!");
+		if(aMaximum < 0 || aQuantity < 0 || aPrice < 0)
+			throw new IllegalArgumentException("Invaild arguments! Maximum, quantity and price must be equal or more than 0!");
 		this.itemName = aItemName;
 		this.quantity = aQuantity;
 		this.maximum = aMaximum;
@@ -17,7 +17,7 @@ public class Item {
 	
 	public String getName()
 	{
-		return this.itemName;
+		return itemName;
 	}
 	public int getQuantity()
 	{
@@ -55,7 +55,18 @@ public class Item {
 		else
 			return false;
 	}
-
+	public void setName(String name) {
+		this.itemName = name;
+	}
+	public void setQuantity(int quantity){
+		this.quantity = quantity;
+	}
+	public void setMaximum(int maximum){
+		this.maximum = maximum;
+	}
+	public void setPrice(double price){
+		this.price = price;
+	}
 	public void removeItem() {
 		itemName = null; 
 		quantity = 0; 

@@ -37,8 +37,6 @@ public class Location
 		{
 			throw e;
 		}
-		if(this.locationItems.contains(newItem))
-			throw new IllegalArgumentException("Item already in database!");
 		locationItems.add(newItem);
 		return newItem;
 	}
@@ -57,5 +55,8 @@ public class Location
 	public void removeLocation() {
 		this.name = null;
 		this.locationItems = null;
+	}
+	public Item getItem(int itemID) {
+		return locationItems.get(itemID);
 	}
 }

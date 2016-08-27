@@ -1,6 +1,7 @@
 package location;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -27,7 +28,7 @@ public class LocationController {
 	}
 	public void addItem(Item item)
 	{
-		
+		model.addItem(item);
 	}
 	public void printLocationInfo()
 	{
@@ -51,7 +52,7 @@ public class LocationController {
 	}
 	public void editLocation(String name)
 	{
-		this.setName(name);
+		setName(name);
 	}
 	public void setName(String name)
 	{
@@ -60,12 +61,24 @@ public class LocationController {
 	public ArrayList<Item> getItems(String name)
 	{
 		ArrayList<Item> temp = new ArrayList<Item>();
-		for(Item currentLocation : model.getItems())
+		int i = 0;
+		removeNulls();
+		for(Item currentItem : model.getItems())
 		{
-			if(currentLocation.getName().toLowerCase().contains(name.toLowerCase()))
-				temp.add(currentLocation);
+			if(currentItem.getName().toLowerCase().contains(name.toLowerCase()))
+				temp.add(currentItem);
 		}
 		return temp;
+	}
+	private void removeNulls() {
+		ArrayList<Item> items = model.getItems();
+		for(int i = 0; i < model.getItemsCount(); i++)
+		{
+			if(items.get(i).getName() == null)
+			{
+				items.remove(i); i--;
+			}
+		}
 	}
 	public void itemEditor(JDialog locationDialbox, Item newItem, boolean isNew) {
 		ItemView itemView = new ItemView();
@@ -78,6 +91,9 @@ public class LocationController {
 	}
 	public void updateItems()
 	{
-		
+		view.updateItems(model.getItems());
+	}
+	public Item getItem(int itemID) {
+		return model.getItem(itemID);
 	}
 }

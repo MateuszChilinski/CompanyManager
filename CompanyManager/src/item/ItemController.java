@@ -44,5 +44,22 @@ public class ItemController {
 	public void itemEditor(JDialog locationDialbox, boolean isNew) {
 		view.displayDialbox(locationDialbox, isNew);
 	}
-	
+	public int getMaximum() {
+		return model.getMaxmimum(); 
+	}
+	public double getPrice() {
+		return model.getPrice();
+	}
+	public void setName(String name) {
+		model.setName(name);
+	}
+	public void setQuantity(int quantity){
+		model.setQuantity(quantity);
+	}
+	public void setMaximum(int maximum){
+		model.setMaximum(maximum);
+	}
+	public void setPrice(double price){
+		model.setPrice(price);
+	}
 }
