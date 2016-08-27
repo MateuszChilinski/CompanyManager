@@ -29,11 +29,7 @@ public class CompanyManager
 				e.printStackTrace();
 				System.err.println(e.getMessage());
 			}
-			/**
-			Company newCompany = new Company();
-			System.out.println(myFile.exportCompany(newCompany));**/
 		});
-		//System.exit(0);
 	}
 
 }

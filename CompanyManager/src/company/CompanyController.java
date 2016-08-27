@@ -13,6 +13,7 @@ import company.Company;
 import company.CompanyView;
 import companyManager.CompanyManager;
 import fileSystem.FileSystem;
+import item.Item;
 import location.Location;
 import location.LocationController;
 import location.LocationView;
@@ -31,9 +32,14 @@ public class CompanyController {
 	{
 		view.printLocations(model.getLocations());
 	}
+	public ArrayList<Location> getLocations()
+	{
+		return model.getLocations();
+	}
 	public ArrayList<Location> getLocations(String name)
 	{
 		ArrayList<Location> temp = new ArrayList<Location>();
+		removeNulls();
 		for(Location currentLocation : model.getLocations())
 		{
 			if(currentLocation.getName().toLowerCase().contains(name.toLowerCase()))
@@ -54,6 +60,16 @@ public class CompanyController {
 	public Location getLocation(int i)
 	{
 		return model.getLocation(i);
+	}
+	private void removeNulls() {
+		ArrayList<Location> locations = model.getLocations();
+		for(int i = 0; i < locations.size(); i++)
+		{
+			if(locations.get(i).getName() == null)
+			{
+				locations.remove(i); i--;
+			}
+		}
 	}
 	public void setName(String name)
 	{

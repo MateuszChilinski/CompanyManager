@@ -17,20 +17,16 @@ public class ItemView{
 	private JPanel toolbarPanel = new JPanel();
 	private JPanel itemEditorPanel = new JPanel(new GridBagLayout());
 	ItemController controller;
-	public void setController(ItemController newController)
-	{
+	public void setController(ItemController newController) {
 		this.controller = newController;
 	}
-	public void printInfo(String itemName, int quantity, int maximum, double price)
-	{
+	public void printInfo(String itemName, int quantity, int maximum, double price) {
 		System.out.printf("Item name: %s\nQuantity: %d\nMaximum quantity: %d\nPrice per unit: %f", itemName, quantity, maximum, price);
 	}
-	public JPanel itemEditor(JDialog locationDialbox, JDialog dialogBox, boolean isNew)
-	{
+	public JPanel itemEditor(JDialog locationDialbox, JDialog dialogBox, boolean isNew) {
 		//itemEditorPanel.setSize(1000, 1000);
 		initiateMainPanel(dialogBox, isNew);
-		if(isNew == false)
-		{
+		if(isNew == false) {
 			initiateToolbar(locationDialbox, dialogBox);
 		}
 		return itemEditorPanel;
@@ -78,8 +74,7 @@ public class ItemView{
 		controller.setMaximum(maximum);
 		controller.setPrice(price);
 	}
-	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty)
-	{
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty) {
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
@@ -89,8 +84,7 @@ public class ItemView{
 		position.weighty = weighty;
 		return position;
 	}
-	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty, Insets insets)
-	{
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty, Insets insets) {
 		GridBagConstraints position = setPosition(gridx, gridy, weightx, weighty);
 		position.insets = insets;
 		return position;
@@ -98,10 +92,8 @@ public class ItemView{
 	public void displayDialbox(JDialog locationDialbox, boolean isNew) {
 		ItemEditor itemEditor = new ItemEditor(locationDialbox, isNew);
 	}
-	private class ItemEditor extends JDialog
-	{
-		ItemEditor(JDialog locationDialbox, boolean isNew)
-		{
+	private class ItemEditor extends JDialog {
+		ItemEditor(JDialog locationDialbox, boolean isNew) {
 			super(locationDialbox, "Item Editor", true);
 			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { setVisible(false); controller.removeItem(); } });
 			this.setResizable(false);
@@ -110,22 +102,18 @@ public class ItemView{
 			setVisible(true);
 		}
 	}
-	private class RemoveItem extends AbstractAction
-	{
+	private class RemoveItem extends AbstractAction {
 		JDialog dialogBox;
 		JDialog locationDialbox;
-		public RemoveItem(String name, JDialog locationDialbox, JDialog dialogBox)
-		{
+		public RemoveItem(String name, JDialog locationDialbox, JDialog dialogBox) {
 			super(name);
 			this.dialogBox = dialogBox;
 			this.locationDialbox = locationDialbox;
 		}
-		@Override public void actionPerformed(ActionEvent event)
-		{			
+		@Override 
+		public void actionPerformed(ActionEvent event) {			
 			controller.removeItem();
 			dialogBox.setVisible(false);
-			
-			//locationDialbox.pack();
 		}
 	}
 }

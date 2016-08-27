@@ -11,6 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import location.Location;
@@ -123,6 +125,16 @@ public class CompanyView extends JFrame{
 		searchBar.getDocument().addDocumentListener(updateList);
 		locationTable.addMouseListener(new TableDobuleClick());
 		contentPanel.add(locationTable, setPosition(0,1,1,0));
+		locationTableModel.addTableModelListener(new TableModelListener(){
+			public void tableChanged(TableModelEvent e) {
+		         int column = e.getColumn();
+		         int row = e.getFirstRow();
+		         if(column == 1)
+		         {
+		        	 controller.getLocation(row-1).setName((String) locationTableModel.getValueAt(row, column));
+		         }
+		      }
+		});
 	}
 	public void updateLocations(ArrayList<Location> companyLocations)
 	{

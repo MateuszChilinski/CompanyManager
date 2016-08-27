@@ -14,6 +14,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import company.CompanyView;
@@ -22,7 +24,6 @@ import item.ItemController;
 import item.ItemView;
 
 public class LocationView {
-	
 	LocationController controller;
 	private JPanel toolbarPanel = new JPanel();
 	private JPanel locationEditorPanel = new JPanel(new GridBagLayout());
@@ -31,19 +32,15 @@ public class LocationView {
 	private UpdateSearch updateList;
 	private JTable itemTable;
 	LocationEditor locationDialbox;
-	public void printLocationInfo(String name, int itemsCount)
-	{
+	public void printLocationInfo(String name, int itemsCount) {
 		System.out.printf("Location name: %s\nItems in stock: %d\n", name, itemsCount);
 	}
-	public void setController(LocationController newController)
-	{
+	public void setController(LocationController newController) {
 		this.controller = newController;
 	}
-	public void printLocationItemsInfo(ArrayList<Item> items, String name)
-	{
+	public void printLocationItemsInfo(ArrayList<Item> items, String name) {
 		System.out.printf("Location name: %s\n", name);
-		for(Item currentItem : items)
-		{
+		for(Item currentItem : items) {
 			ItemController currentItemController = new ItemController(currentItem, new ItemView());
 			currentItemController.printInfo();
 		}
@@ -52,8 +49,7 @@ public class LocationView {
 	public void displayDialbox(JFrame owner, boolean isNew) {
 		locationDialbox = new LocationEditor(owner, isNew);
 	}
-	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty)
-	{
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty) {
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;
 		position.fill = GridBagConstraints.HORIZONTAL;
@@ -63,21 +59,18 @@ public class LocationView {
 		position.weighty = weighty;
 		return position;
 	}
-	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty, Insets insets)
-	{
+	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty, Insets insets) {
 		GridBagConstraints position = setPosition(gridx, gridy, weightx, weighty);
 		position.insets = insets;
 		return position;
 	}
-	public JPanel locationEditor(JFrame owner, JDialog dialogBox, boolean isNew)
-	{
+	public JPanel locationEditor(JFrame owner, JDialog dialogBox, boolean isNew) {
 		locationEditorPanel.setSize(1000, 1000);
 		initiateMainPanel(dialogBox, isNew);
 		initiateToolbar(dialogBox);
 		return locationEditorPanel;
 	}
 	private void initiateMainPanel(JDialog dialogBox, boolean isNew) {
-		
 		JPanel locationNamePanel = new JPanel(new GridBagLayout());
 		/** Location name **/
 		JTextField locationName = new JTextField(controller.getName());
@@ -99,8 +92,7 @@ public class LocationView {
 		/** Adding action panel to location editor **/
 		locationEditorPanel.add(actionPanel, setPosition(1, 2, 1, 0));
 	}
-	public void printItems(ArrayList<Item> locationItems)
-	{
+	public void printItems(ArrayList<Item> locationItems) {
 		JPanel itemsPanel = new JPanel(new GridBagLayout());
 		itemsPanel.add(searchBar, setPosition(0,0,1,0));
 		updateList = new UpdateSearch(searchBar, itemTableModel);
@@ -110,15 +102,26 @@ public class LocationView {
 		itemsPanel.add(itemTable, setPosition(0,1,1,0));
 		itemsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Items"));
 		locationEditorPanel.add(itemsPanel, setPosition(1, 1, 0, 0, new Insets(5, 5, 3, 3)));
+		itemTableModel.addTableModelListener(new TableModelListener(){
+			public void tableChanged(TableModelEvent e) {
+		         int column = e.getColumn();
+		         int row = e.getFirstRow();
+		         if(column == 1) {
+		        	 controller.getItem(row-1).setName((String) itemTableModel.getValueAt(row, column));
+		         }
+		      }
+		});
 	}
-	public void initiateToolbar(JDialog dialogBox)
-	{
+	public void initiateToolbar(JDialog dialogBox) {
 		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
 		helpingToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Location"));
 		helpingToolbar.setFloatable(false);
 		JButton addItem = new JButton("Add an item");
 		addItem.addActionListener(new AddItem("Add an item", dialogBox));
 		helpingToolbar.add(addItem);
+		JButton removeLocation = new JButton("Remove location");
+		removeLocation.addActionListener(new RemovalConfirmation("Remove this location", dialogBox));
+		helpingToolbar.add(removeLocation);
 		toolbarPanel.add(helpingToolbar, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 		locationEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 	}
@@ -126,46 +129,58 @@ public class LocationView {
 		updateList.updateList();
 		itemTable = new JTable(itemTableModel);
 	}
-	public void saveLocation(String name)
-	{
+	public void saveLocation(String name) {
 		controller.editLocation(name);
 	}
-	private class ItemList extends DefaultTableModel
-	{
-		ItemList()
-		{
+	private class ItemList extends DefaultTableModel {
+		ItemList() {
 			this.addColumn("No.");
 			this.addColumn("Location name");
 			this.addColumn("Items count");
 			this.addColumn("Item price");
 			this.addRow(new Object[]{"No.", "Location name", "Items count", "Item price"});
 		}
-		@Override public boolean isCellEditable(int row, int column)
-		{
+		@Override 
+		public boolean isCellEditable(int row, int column) {
 			if((column == 1 || column == 3) && row != 0)
 				return true;
 			return false;
 		}
 	}
-	private class AddItem extends AbstractAction
-	{
+	private class RemovalConfirmation extends AbstractAction {
+		private JDialog dialogBox;
+		  public RemovalConfirmation(String name, JDialog dialogBox) {
+			  super(name);
+			  this.dialogBox = dialogBox;
+		  }
+
+		@Override
+		public void actionPerformed(ActionEvent arg) {
+		    JDialog.setDefaultLookAndFeelDecorated(true);
+		    int response = JOptionPane.showConfirmDialog(null, "Do you want to remove this location?", "Confirm",
+		        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		    if (response == JOptionPane.YES_OPTION) {
+		      controller.removeLocation();
+		      dialogBox.setVisible(false);
+		    }
+		}
+	}
+	private class AddItem extends AbstractAction {
 		JDialog dialogBox;
-		public AddItem(String name, JDialog dialogBox)
-		{
+		public AddItem(String name, JDialog dialogBox) {
 			super(name);
 			this.dialogBox = dialogBox;
 		}
-		@Override public void actionPerformed(ActionEvent event)
-		{
+		@Override 
+		public void actionPerformed(ActionEvent event) {
 			Item newItem = new Item("New Item Name", 0, 0, 0.0);
 			controller.itemEditor((JDialog) locationDialbox, newItem, true);
 			dialogBox.pack();
 		}
 	}
-	private class TableDobuleClick extends MouseAdapter
-	{
-		@Override public void mousePressed(MouseEvent me) 
-		{ 
+	private class TableDobuleClick extends MouseAdapter {
+		@Override 
+		public void mousePressed(MouseEvent me) { 
 			JTable table = (JTable) me.getSource();
 	        Point p = me.getPoint();
 	        int itemID = table.rowAtPoint(p)-1;
@@ -185,13 +200,16 @@ public class LocationView {
 			this.searchBar = searchBar;
 			updateList();
 		}
-		@Override public void changedUpdate(DocumentEvent e) {
+		@Override 
+		public void changedUpdate(DocumentEvent e) {
 			updateList();
 		}
-		@Override public void removeUpdate(DocumentEvent e) {
+		@Override 
+		public void removeUpdate(DocumentEvent e) {
 			updateList();
 		}
-		@Override public void insertUpdate(DocumentEvent e) {
+		@Override 
+		public void insertUpdate(DocumentEvent e) {
 			updateList();
 		}
 		private void updateList() {
@@ -200,30 +218,19 @@ public class LocationView {
 			tableModel.setRowCount(0);
 			tableModel.addRow(new Object[]{"<html><b>No.</b></html>", "<html><b>Location name</b></html>", "<html><b>Items count</b></html>", "<html><b>Item price</b></html>"});
 			ArrayList<Item> currentList = controller.getItems(currentString);
-			for(Item currentItem : currentList)
-			{
+			for(Item currentItem : currentList) {
 				tableModel.addRow(new Object[]{i++, currentItem.getName(), currentItem.getQuantity(), currentItem.getPrice()});
 			}
 		}
 	}
-	private class LocationEditor extends JDialog
-	{
-		LocationEditor()
-		{
-			
-		}
-		LocationEditor(JFrame owner, boolean isNew)
-		{
+	private class LocationEditor extends JDialog {
+		LocationEditor(JFrame owner, boolean isNew) {
 			super(owner, "Location Editor", true);
 			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { if(isNew == true) controller.removeLocation(); } });
 			this.setResizable(false);
 			add(locationEditor(owner, this, isNew));
 			pack();
 			setVisible(true);
-		}
-		public void update()
-		{
-			System.out.print("z");
 		}
 	}
 }
