@@ -21,23 +21,16 @@ import location.LocationView;
 public class CompanyController {
 	private Company model;
 	private CompanyView view;
-	public CompanyController(Company modelCompany, CompanyView view)
-	{
-		//model.setController(this);
-		this.model = modelCompany;
-		view.setController(this);
-		this.view = view;
+	
+	public CompanyController(Company aModel, CompanyView aView) {
+		model = aModel;
+		aView.setController(this);
+		view = aView;
 	}
-	public void printLocations()
-	{
-		view.printLocations(model.getLocations());
-	}
-	public ArrayList<Location> getLocations()
-	{
+	public ArrayList<Location> getLocations() {
 		return model.getLocations();
 	}
-	public ArrayList<Location> getLocations(String name)
-	{
+	public ArrayList<Location> getLocations(String name) {
 		ArrayList<Location> temp = new ArrayList<Location>();
 		removeNulls();
 		for(Location currentLocation : model.getLocations())
@@ -47,19 +40,20 @@ public class CompanyController {
 		}
 		return temp;
 	}
-	public Location addLocation(String name)
-	{
-		return model.addLocation(name);
-		//TODO: add location to file/server as well
-	}
-	public Location addLocation(Location location)
-	{
-		return model.addLocation(location);
-		//TODO: add location to file/server as well
-	}
-	public Location getLocation(int i)
-	{
+	public Location getLocation(int i) {
 		return model.getLocation(i);
+	}
+	public String getName() {
+		return model.getName();
+	}
+	public void setName(String name) {
+		model.setName(name);
+	}
+	public Location addLocation(String name) {
+		return model.addLocation(name);
+	}
+	public Location addLocation(Location location) {
+		return model.addLocation(location);
 	}
 	private void removeNulls() {
 		ArrayList<Location> locations = model.getLocations();
@@ -71,15 +65,10 @@ public class CompanyController {
 			}
 		}
 	}
-	public void setName(String name)
-	{
-		model.setName(name);
+	public void printLocations() {
+		view.printLocations(model.getLocations());
 	}
-	public String getName() {
-		return model.getName();
-	}
-	public void locationEditor(JFrame owner, Location location, boolean isNew)
-	{
+	public void locationEditor(JFrame owner, Location location, boolean isNew) {
 		LocationView locationView = new LocationView();
 		LocationController locationController = new LocationController(location, locationView);
 		locationController.locationEditor(owner, isNew);
@@ -90,8 +79,7 @@ public class CompanyController {
 	public void updateLocations() {
 		view.updateLocations(model.getLocations());
 	}
-	public void saveData() throws UnsupportedEncodingException, FileNotFoundException, IOException
-	{
+	public void saveData() throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		FileSystem myFile = new FileSystem();
 		String url = CompanyManager.class.getResource("testingCompany.txt").getPath();
 		url = url.substring(1, url.length());

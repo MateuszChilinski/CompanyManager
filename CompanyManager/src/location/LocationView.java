@@ -32,11 +32,11 @@ public class LocationView {
 	private UpdateSearch updateList;
 	private JTable itemTable;
 	LocationEditor locationDialbox;
-	public void printLocationInfo(String name, int itemsCount) {
-		System.out.printf("Location name: %s\nItems in stock: %d\n", name, itemsCount);
-	}
 	public void setController(LocationController newController) {
-		this.controller = newController;
+		controller = newController;
+	}
+	public void displayDialbox(JFrame owner, boolean isNew) {
+		locationDialbox = new LocationEditor(owner, isNew);
 	}
 	public void printLocationItemsInfo(ArrayList<Item> items, String name) {
 		System.out.printf("Location name: %s\n", name);
@@ -44,10 +44,6 @@ public class LocationView {
 			ItemController currentItemController = new ItemController(currentItem, new ItemView());
 			currentItemController.printInfo();
 		}
-	}
-	
-	public void displayDialbox(JFrame owner, boolean isNew) {
-		locationDialbox = new LocationEditor(owner, isNew);
 	}
 	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty) {
 		GridBagConstraints position = new GridBagConstraints();
@@ -92,6 +88,19 @@ public class LocationView {
 		/** Adding action panel to location editor **/
 		locationEditorPanel.add(actionPanel, setPosition(1, 2, 1, 0));
 	}
+	public void initiateToolbar(JDialog dialogBox) {
+		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
+		helpingToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Location"));
+		helpingToolbar.setFloatable(false);
+		JButton addItem = new JButton("Add an item");
+		addItem.addActionListener(new AddItem("Add an item", dialogBox));
+		helpingToolbar.add(addItem);
+		JButton removeLocation = new JButton("Remove location");
+		removeLocation.addActionListener(new RemovalConfirmation("Remove this location", dialogBox));
+		helpingToolbar.add(removeLocation);
+		toolbarPanel.add(helpingToolbar, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
+		locationEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
+	}
 	public void printItems(ArrayList<Item> locationItems) {
 		JPanel itemsPanel = new JPanel(new GridBagLayout());
 		itemsPanel.add(searchBar, setPosition(0,0,1,0));
@@ -112,19 +121,6 @@ public class LocationView {
 		      }
 		});
 	}
-	public void initiateToolbar(JDialog dialogBox) {
-		JToolBar helpingToolbar = new JToolBar(JToolBar.VERTICAL);
-		helpingToolbar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Location"));
-		helpingToolbar.setFloatable(false);
-		JButton addItem = new JButton("Add an item");
-		addItem.addActionListener(new AddItem("Add an item", dialogBox));
-		helpingToolbar.add(addItem);
-		JButton removeLocation = new JButton("Remove location");
-		removeLocation.addActionListener(new RemovalConfirmation("Remove this location", dialogBox));
-		helpingToolbar.add(removeLocation);
-		toolbarPanel.add(helpingToolbar, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
-		locationEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
-	}
 	public void updateItems(ArrayList<Item> items) {
 		updateList.updateList();
 		itemTable = new JTable(itemTableModel);
@@ -132,13 +128,14 @@ public class LocationView {
 	public void saveLocation(String name) {
 		controller.editLocation(name);
 	}
+	
 	private class ItemList extends DefaultTableModel {
 		ItemList() {
-			this.addColumn("No.");
-			this.addColumn("Location name");
-			this.addColumn("Items count");
-			this.addColumn("Item price");
-			this.addRow(new Object[]{"No.", "Location name", "Items count", "Item price"});
+			addColumn("No.");
+			addColumn("Location name");
+			addColumn("Items count");
+			addColumn("Item price");
+			addRow(new Object[]{"No.", "Location name", "Items count", "Item price"});
 		}
 		@Override 
 		public boolean isCellEditable(int row, int column) {
@@ -149,9 +146,9 @@ public class LocationView {
 	}
 	private class RemovalConfirmation extends AbstractAction {
 		private JDialog dialogBox;
-		  public RemovalConfirmation(String name, JDialog dialogBox) {
+		  public RemovalConfirmation(String name, JDialog aDialogBox) {
 			  super(name);
-			  this.dialogBox = dialogBox;
+			  dialogBox = aDialogBox;
 		  }
 
 		@Override
@@ -167,9 +164,9 @@ public class LocationView {
 	}
 	private class AddItem extends AbstractAction {
 		JDialog dialogBox;
-		public AddItem(String name, JDialog dialogBox) {
+		public AddItem(String name, JDialog aDialogBox) {
 			super(name);
-			this.dialogBox = dialogBox;
+			dialogBox = aDialogBox;
 		}
 		@Override 
 		public void actionPerformed(ActionEvent event) {
@@ -194,10 +191,11 @@ public class LocationView {
 		JTextField searchBar;
 		DefaultTableModel tableModel;
 		ArrayList<Location> list;
-		UpdateSearch(JTextField searchBar, DefaultTableModel tableModel)
+		
+		UpdateSearch(JTextField aSearchBar, DefaultTableModel aTableModel)
 		{
-			this.tableModel = tableModel;
-			this.searchBar = searchBar;
+			tableModel = aTableModel;
+			searchBar = aSearchBar;
 			updateList();
 		}
 		@Override 
@@ -226,8 +224,8 @@ public class LocationView {
 	private class LocationEditor extends JDialog {
 		LocationEditor(JFrame owner, boolean isNew) {
 			super(owner, "Location Editor", true);
-			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { if(isNew == true) controller.removeLocation(); } });
-			this.setResizable(false);
+			addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { if(isNew == true) controller.removeLocation(); } });
+			setResizable(false);
 			add(locationEditor(owner, this, isNew));
 			pack();
 			setVisible(true);

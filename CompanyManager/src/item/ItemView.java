@@ -1,30 +1,25 @@
 package item;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
+import java.awt.event.*;
+import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.*;
 
-import location.LocationController;
-import location.LocationView;
 
-public class ItemView{
+public class ItemView {
 	private JPanel toolbarPanel = new JPanel();
 	private JPanel itemEditorPanel = new JPanel(new GridBagLayout());
 	ItemController controller;
+	
 	public void setController(ItemController newController) {
-		this.controller = newController;
+		controller = newController;
 	}
 	public void printInfo(String itemName, int quantity, int maximum, double price) {
 		System.out.printf("Item name: %s\nQuantity: %d\nMaximum quantity: %d\nPrice per unit: %f", itemName, quantity, maximum, price);
 	}
 	public JPanel itemEditor(JDialog locationDialbox, JDialog dialogBox, boolean isNew) {
-		//itemEditorPanel.setSize(1000, 1000);
 		initiateMainPanel(dialogBox, isNew);
 		if(isNew == false) {
 			initiateToolbar(locationDialbox, dialogBox);
@@ -42,27 +37,39 @@ public class ItemView{
 		itemEditorPanel.add(toolbarPanel, setPosition(0, 0, 0, 0, new Insets(5, 5, 3, 3)));
 	}
 	private void initiateMainPanel(JDialog dialogBox, boolean isNew) {
-		JPanel locationNamePanel = new JPanel(new GridBagLayout());
-		/** Location name **/
-		locationNamePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Item propeties"));
-		itemEditorPanel.add(locationNamePanel, setPosition(1, 0, 0, 0,  new Insets(5, 5, 3, 3)));
+		JPanel itemPropertiesPanel = new JPanel(new GridBagLayout());
+		/** Item properties **/
+		itemPropertiesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Item propeties"));
+		itemEditorPanel.add(itemPropertiesPanel, setPosition(1, 0, 0, 0,  new Insets(5, 5, 3, 3)));
 		JTextField itemName = new JTextField(controller.getName());
-		locationNamePanel.add(itemName, setPosition(0, 0, 1, 0));
+		itemPropertiesPanel.add(itemName, setPosition(0, 0, 1, 0));
 		JTextField itemQuantity = new JTextField(String.valueOf(controller.getQuantity()));
-		locationNamePanel.add(itemQuantity, setPosition(0, 1, 1, 0));
+		itemPropertiesPanel.add(itemQuantity, setPosition(0, 1, 1, 0));
 		JTextField itemMaximum = new JTextField(String.valueOf(controller.getMaximum()));
-		locationNamePanel.add(itemMaximum, setPosition(0, 2, 1, 0));
+		itemPropertiesPanel.add(itemMaximum, setPosition(0, 2, 1, 0));
 		JTextField itemPrice = new JTextField(String.valueOf(controller.getPrice()));
-		locationNamePanel.add(itemPrice, setPosition(0, 3, 1, 0));
+		itemPropertiesPanel.add(itemPrice, setPosition(0, 3, 1, 0));
 		/** Panel for save & cancel **/
 		JPanel actionPanel = new JPanel();
 		/** Saving button **/
 		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(event -> { dialogBox.setVisible(false); saveItem(itemName.getText(), Integer.parseInt(itemQuantity.getText()), Integer.parseInt(itemMaximum.getText()), Double.parseDouble(itemPrice.getText()));});
+		saveButton.addActionListener(event -> { 
+			if(Integer.parseInt(itemQuantity.getText()) > 0 && Integer.parseInt(itemMaximum.getText()) > 0 && Double.parseDouble(itemPrice.getText()) > 0)
+			{
+				dialogBox.setVisible(false);
+				saveItem(itemName.getText(), Integer.parseInt(itemQuantity.getText()), Integer.parseInt(itemMaximum.getText()), Double.parseDouble(itemPrice.getText()));
+			}
+			else
+				JOptionPane.showMessageDialog(dialogBox, "Quantity, maximum quantity and price must be more or equal to zero!", "Error!", JOptionPane.ERROR_MESSAGE);
+		});
 		actionPanel.add(saveButton, setPosition(0, 1, 1, 0));
 		/** Cancel button **/
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(event -> { dialogBox.setVisible(false); if(isNew == true) controller.removeItem(); });
+		cancelButton.addActionListener(event -> { 
+			dialogBox.setVisible(false); 
+			if(isNew == true) 
+				controller.removeItem(); 
+		});
 		actionPanel.add(cancelButton, setPosition(0, 1, 1, 0));
 		/** Adding action panel to location editor **/
 		itemEditorPanel.add(actionPanel, setPosition(1, 2, 1, 0));
@@ -95,8 +102,8 @@ public class ItemView{
 	private class ItemEditor extends JDialog {
 		ItemEditor(JDialog locationDialbox, boolean isNew) {
 			super(locationDialbox, "Item Editor", true);
-			super.addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { setVisible(false); controller.removeItem(); } });
-			this.setResizable(false);
+			addWindowListener(new WindowAdapter() { public void windowClosing(WindowEvent e) { setVisible(false); controller.removeItem(); } });
+			setResizable(false);
 			add(itemEditor(locationDialbox, this, isNew));
 			pack();
 			setVisible(true);
@@ -105,10 +112,11 @@ public class ItemView{
 	private class RemoveItem extends AbstractAction {
 		JDialog dialogBox;
 		JDialog locationDialbox;
-		public RemoveItem(String name, JDialog locationDialbox, JDialog dialogBox) {
+		
+		public RemoveItem(String name, JDialog aLocationDialbox, JDialog aDialogBox) {
 			super(name);
-			this.dialogBox = dialogBox;
-			this.locationDialbox = locationDialbox;
+			dialogBox = aDialogBox;
+			locationDialbox = aLocationDialbox;
 		}
 		@Override 
 		public void actionPerformed(ActionEvent event) {			

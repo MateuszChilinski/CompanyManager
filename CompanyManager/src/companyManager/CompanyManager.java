@@ -11,10 +11,8 @@ import javax.swing.*;
 import company.*;
 import fileSystem.*;
 
-public class CompanyManager 
-{
-	public static void main(String[] args) 
-	{
+public class CompanyManager {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			FileSystem myFile = new FileSystem();
 			try {
@@ -25,7 +23,8 @@ public class CompanyManager
 				CompanyView viewCompany = new CompanyView();
 				CompanyController myCompanyController = new CompanyController(modelCompany, viewCompany);
 				myCompanyController.printLocations();
-			} catch (IOException e) {
+			} 
+			catch (IOException e) {
 				e.printStackTrace();
 				System.err.println(e.getMessage());
 			}

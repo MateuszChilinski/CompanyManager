@@ -8,9 +8,9 @@ public class ItemController {
 	private Item model;
 	private ItemView view;
 	
-	public ItemController(Item model, ItemView view) {
-		this.model = model;
-		this.view = view;
+	public ItemController(Item aModel, ItemView aView) {
+		model = aModel;
+		view = aView;
 	}
 	public String getName() {
 		return model.getName();
@@ -18,23 +18,8 @@ public class ItemController {
 	public int getQuantity() {
 		return model.getQuantity();
 	}
-	public double getPercentage() throws ArithmeticException {
+	public double getPercentage() {
 		return model.getPercentage();
-	}
-	public void removeItem() {
-		model.removeItem();
-	}
-	public void removeItem(int removeQuantity) {
-		model.removeItem(removeQuantity);
-	}
-	public void addItem(int addQuantity) {
-		model.addItem(addQuantity);
-	}
-	public void printInfo() {
-		view.printInfo(model.getName(), model.getQuantity(), model.getMaxmimum(), model.getPrice());
-	}
-	public void itemEditor(JDialog locationDialbox, boolean isNew) {
-		view.displayDialbox(locationDialbox, isNew);
 	}
 	public int getMaximum() {
 		return model.getMaxmimum(); 
@@ -53,5 +38,20 @@ public class ItemController {
 	}
 	public void setPrice(double price) {
 		model.setPrice(price);
+	}	
+	public void addItem(int addQuantity) {
+		model.addItem(addQuantity);
+	}
+	public void removeItem(int removeQuantity) {
+		model.removeItem(removeQuantity);
+	}
+	public void removeItem() {
+		model.removeItem();
+	}
+	public void printInfo() {
+		view.printInfo(model.getName(), model.getQuantity(), model.getMaxmimum(), model.getPrice());
+	}
+	public void itemEditor(JDialog locationDialbox, boolean isNew) {
+		view.displayDialbox(locationDialbox, isNew);
 	}
 }
