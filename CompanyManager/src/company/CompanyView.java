@@ -24,11 +24,11 @@ public class CompanyView extends JFrame{
 	private JPanel mainPanel = new JPanel(new GridBagLayout());
 	private JPanel toolbarPanel = new JPanel();
 	private JPanel contentPanel = new JPanel(new GridBagLayout());
-	private DefaultTableModel locationModel = new LocationList();;
+	private CompanyController controller;
+	private DefaultTableModel locationTableModel = new LocationList();;
 	private UpdateSearch updateList;
-	CompanyController controller;
-	JTable locationTable;
-	JTextField searchBar = new JTextField("");
+	private JTable locationTable;
+	private JTextField searchBar = new JTextField("");
 	public CompanyView()
 	{
 		initWindow();
@@ -118,7 +118,7 @@ public class CompanyView extends JFrame{
 	public void printLocations(ArrayList<Location> companyLocations)
 	{
 		contentPanel.add(searchBar, setPosition(0,0,1,0));
-		updateList = new UpdateSearch(searchBar, locationModel);
+		updateList = new UpdateSearch(searchBar, locationTableModel);
 		updateLocations(companyLocations);
 		searchBar.getDocument().addDocumentListener(updateList);
 		locationTable.addMouseListener(new TableDobuleClick());
@@ -127,11 +127,11 @@ public class CompanyView extends JFrame{
 	public void updateLocations(ArrayList<Location> companyLocations)
 	{
 		updateList.updateList();
-		locationTable = new JTable(locationModel);
+		locationTable = new JTable(locationTableModel);
 	}
 	public void addLocation(String name)
 	{
-		locationModel.addRow(new Object[] {locationModel.getRowCount(), name, 0});
+		locationTableModel.addRow(new Object[] {locationTableModel.getRowCount(), name, 0});
 	}
 	public void locationEditor(JFrame owner, Location location)
 	{

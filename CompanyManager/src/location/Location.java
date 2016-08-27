@@ -26,7 +26,7 @@ public class Location
 	{
 		this.locationItems.add(item);
 	}
-	public void addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
+	public Item addItem(String aItemName, int aQuantity, int aMaximum, double aPrice) throws IllegalArgumentException
 	{
 		Item newItem;
 		try
@@ -39,7 +39,8 @@ public class Location
 		}
 		if(this.locationItems.contains(newItem))
 			throw new IllegalArgumentException("Item already in database!");
-		this.locationItems.add(newItem);
+		locationItems.add(newItem);
+		return newItem;
 	}
 	public ArrayList<Item> getItems()
 	{

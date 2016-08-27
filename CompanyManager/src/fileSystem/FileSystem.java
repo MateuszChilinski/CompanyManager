@@ -21,7 +21,7 @@ public class FileSystem {
 	{
 		try(FileInputStream currentFile = new FileInputStream(path))
 		{
-			return new String(Files.readAllBytes(Paths.get(path)));
+			return new String(Files.readAllBytes(Paths.get(path)), "utf-8");
 		}
 	}
 	public void saveFile(String path, String json) throws UnsupportedEncodingException, FileNotFoundException, IOException

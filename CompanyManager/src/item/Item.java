@@ -55,4 +55,11 @@ public class Item {
 		else
 			return false;
 	}
+
+	public void removeItem() {
+		itemName = null; 
+		quantity = 0; 
+		maximum = 0; 
+		price = 0;
+	}
 }
