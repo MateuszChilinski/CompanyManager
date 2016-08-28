@@ -50,6 +50,7 @@ public class CompanyView extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		setLocationRelativeTo(null);
 	}
 	public void initMainPanel() {
 		add(mainPanel, setPosition(0, 0, 1, 1));

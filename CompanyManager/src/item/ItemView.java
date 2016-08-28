@@ -107,6 +107,7 @@ public class ItemView {
 			setResizable(false);
 			add(itemEditor(locationDialbox, this, isNew));
 			pack();
+			setLocationRelativeTo(locationDialbox);
 			setVisible(true);
 		}
 	}

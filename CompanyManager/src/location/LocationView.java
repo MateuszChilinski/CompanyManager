@@ -226,6 +226,7 @@ public class LocationView {
 			setResizable(false);
 			add(locationEditor(owner, this, isNew));
 			pack();
+			setLocationRelativeTo(owner);
 			setVisible(true);
 		}
 	}
