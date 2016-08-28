@@ -66,9 +66,6 @@ public class LocationController {
 			}
 		}
 	}
-	public void printLocationItemsInfo() {
-		view.printLocationItemsInfo(model.getItems(), model.getName());
-	}
 	public void locationEditor(JFrame owner, boolean isNew) {
 		view.displayDialbox(owner, isNew);
 	}

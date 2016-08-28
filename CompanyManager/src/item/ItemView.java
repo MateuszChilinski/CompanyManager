@@ -20,9 +20,6 @@ public class ItemView {
 	public void setController(ItemController newController) {
 		controller = newController;
 	}
-	public void printInfo(String itemName, int quantity, int maximum, double price) {
-		System.out.printf("Item name: %s\nQuantity: %d\nMaximum quantity: %d\nPrice per unit: %f", itemName, quantity, maximum, price);
-	}
 	public JPanel itemEditor(JDialog locationDialbox, JDialog dialogBox, boolean isNew) {
 		initiateMainPanel(dialogBox, isNew);
 		if(isNew == false) {
@@ -58,7 +55,7 @@ public class ItemView {
 		/** Saving button **/
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(event -> { 
-			if(Integer.parseInt(itemQuantity.getText()) > 0 && Integer.parseInt(itemMaximum.getText()) > 0 && Double.parseDouble(itemPrice.getText()) > 0)
+			if(Integer.parseInt(itemQuantity.getText()) >= 0 && Integer.parseInt(itemMaximum.getText()) >= 0 && Double.parseDouble(itemPrice.getText()) >= 0)
 			{
 				dialogBox.setVisible(false);
 				saveItem(itemName.getText(), Integer.parseInt(itemQuantity.getText()), Integer.parseInt(itemMaximum.getText()), Double.parseDouble(itemPrice.getText()));

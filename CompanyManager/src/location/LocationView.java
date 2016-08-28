@@ -43,13 +43,6 @@ public class LocationView {
 	public void displayDialbox(JFrame owner, boolean isNew) {
 		locationDialbox = new LocationEditor(owner, isNew);
 	}
-	public void printLocationItemsInfo(ArrayList<Item> items, String name) {
-		System.out.printf("Location name: %s\n", name);
-		for(Item currentItem : items) {
-			ItemController currentItemController = new ItemController(currentItem, new ItemView());
-			currentItemController.printInfo();
-		}
-	}
 	public GridBagConstraints setPosition(int gridx, int gridy, double weightx, double weighty) {
 		GridBagConstraints position = new GridBagConstraints();
 		position.anchor = GridBagConstraints.NORTHWEST;

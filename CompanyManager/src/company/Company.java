@@ -14,10 +14,13 @@ import location.Location;
 public class Company 
 {
 	private ArrayList<Location> companyLocations = new ArrayList<Location>();
-	private String name = "Testing Company";
+	private String name = "New Company";
 	
 	public Company(String aName) {
 		name = aName;
+	}
+	public Company() {
+		
 	}
 	public String getName()
 	{

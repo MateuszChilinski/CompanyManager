@@ -7,6 +7,7 @@ package company;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -86,8 +87,7 @@ public class CompanyController {
 	}
 	public void saveData() throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		FileSystem myFile = new FileSystem();
-		String url = CompanyManager.class.getResource("testingCompany.txt").getPath();
-		url = url.substring(1, url.length());
+		String url = new File("").getAbsolutePath()+"\\testingCompany.txt";
 		myFile.saveFile(url, myFile.exportCompany(this.model));
 	}
 }

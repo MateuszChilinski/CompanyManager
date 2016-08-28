@@ -53,9 +53,6 @@ public class ItemController {
 	public void removeItem() {
 		model.removeItem();
 	}
-	public void printInfo() {
-		view.printInfo(model.getName(), model.getQuantity(), model.getMaxmimum(), model.getPrice());
-	}
 	public void itemEditor(JDialog locationDialbox, boolean isNew) {
 		view.displayDialbox(locationDialbox, isNew);
 	}
